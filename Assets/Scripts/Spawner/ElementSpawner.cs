@@ -7,7 +7,11 @@ public class ElementSpawner : Spawner
     private static ElementSpawner instance;
     public static ElementSpawner Instance { get { return instance; } }
 
-    [SerializeField] public static List<string> elements;
+    protected List<string> elements;
+
+    [SerializeField] public static List<string> elementsInRound;
+
+
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -32,5 +36,26 @@ public class ElementSpawner : Spawner
             return;
         }
         ElementSpawner.instance = this;
+    }
+
+    public virtual void DespawnTwoElements(Transform element1, Transform element2)
+    {
+        if (element1 == null || element2 == null) return;
+        this.Despawn(element1);
+        this.Despawn(element2);
+    }
+
+    public virtual void SetElementsInRound(List<string> elements)
+    {
+        elementsInRound = elements;
+    }
+
+    public virtual Transform SpawnRandomElement(Vector3 positon)
+    {
+        if (elementsInRound == null || elementsInRound.Count == 0) return null;
+        int randomIndex = Random.Range(0, elementsInRound.Count);
+        Transform newElement = this.Spawn(elementsInRound[randomIndex], positon, Quaternion.identity);
+        newElement.gameObject.SetActive(true);
+        return newElement;
     }
 }

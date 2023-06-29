@@ -1,11 +1,25 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DraggableGem : DucHienMonoBehaviour
+public class DraggableElement : DucHienMonoBehaviour
 {
     [SerializeField] private bool isDragging = false;
     [SerializeField] private Vector3 startPositon;
     [SerializeField] private Vector3 offset;
+    [SerializeField] protected SphereCollider sphereCollider;
+    [SerializeField] protected bool isOnTrigger = false;
+
+    protected override void LoadComponents()
+    {
+        base.LoadComponents();
+        this.LoadSphereCollider();
+    }
+    protected virtual void LoadSphereCollider()
+    {
+        if (this.sphereCollider != null) return;
+        this.sphereCollider = GetComponent<SphereCollider>();
+        Debug.Log("Load Sphere Collider: " + transform.name, gameObject);
+    }
 
     protected virtual void OnMouseDown()
     {
@@ -18,6 +32,7 @@ public class DraggableGem : DucHienMonoBehaviour
     {
         isDragging = false;
         this.transform.parent.position = startPositon;
+
     }
 
     protected virtual void Update()
@@ -28,5 +43,18 @@ public class DraggableGem : DucHienMonoBehaviour
             Vector3 currentPosition = Camera.main.ScreenToWorldPoint(currentScreenPoint) + offset;
             transform.parent.position = currentPosition;
         }
+    }
+
+    protected virtual void OnTriggerEnter(Collider other)
+    {
+        if (isDragging == true)
+        {
+            bool SuccessMix = MixerElement.Instance.MixTwoElements(this.transform.parent, other.transform.parent);
+            if (!SuccessMix) return; 
+            ElementSpawner.Instance.SpawnRandomElement(startPositon);
+            isDragging = false;
+        }
+
+
     }
 }

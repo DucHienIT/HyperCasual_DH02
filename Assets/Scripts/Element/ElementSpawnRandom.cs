@@ -22,7 +22,7 @@ public class ElementSpawnRandom : DucHienMonoBehaviour
         {
             for (int j = 0; j < spawnHorizontalCount; j++)
             {
-                string elementPrefab = ElementSpawner.elements[this.RandomElementIndex()];
+                string elementPrefab = ElementSpawner.elementsInRound[this.RandomElementIndex()];
                 Vector2 spawnPosition = new Vector2(j * spawnWidth - ((spawnHorizontalCount-1f)/2f * spawnWidth), i * spawnHeight - ((spawnVerticalCount - 1f) / 2f * spawnWidth)); // Tạo vị trí tạo viên kim cương
                 Transform elementObj = ElementSpawner.Instance.Spawn(elementPrefab, spawnPosition, Quaternion.identity); // Tạo viên kim cương từ Prefab
                 elementObj.gameObject.SetActive(true); // Kích hoạt viên kim cương
@@ -45,7 +45,8 @@ public class ElementSpawnRandom : DucHienMonoBehaviour
 
     protected virtual int RandomElementIndex()
     {
-        return Random.Range(0, ElementSpawner.elements.Count);
+        return Random.Range(0, ElementSpawner.elementsInRound.Count);
     }
+
 
 }

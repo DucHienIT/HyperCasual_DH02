@@ -15,7 +15,7 @@ public class ElementCtrl : DucHienMonoBehaviour
     protected virtual void LoadElementSO()
     {
         if (this.elementSO != null) return;
-        string path = "Element/" + transform.name;
+        string path = "Elements/" + transform.name;
         this.elementSO = Resources.Load<ElementSO>(path);
     }
 
